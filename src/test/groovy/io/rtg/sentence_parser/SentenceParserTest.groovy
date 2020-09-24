@@ -21,6 +21,47 @@ class SentenceParserTest extends Specification {
         sentenceWords == ["is", "sentence", "test", "This"]
     }
 
+    def "Sentence parser reads words properly"() {
+        given:
+        SentenceParser parser = new SentenceParser()
+
+        when:
+        def sentenceStream = parser.parse(streamFromString(sentence))
+        List<List<String>> sentenceWords = sentenceStream.map({ it -> it.sortedWords })
+                                                   .collect(Collectors.toList())
+        then:
+        sentenceWords == expectedWords
+
+        where:
+        sentence                              || expectedWords
+        "This is test sentence."              |  [["is", "sentence", "test", "This"]]
+        " This is test sentence. "            |  [["is", "sentence", "test", "This"], [""]]
+        " This   is   test   sentence. "      |  [["is", "sentence", "test", "This"], [""]]
+        " These . Are Many .. Sentences. "    |  [["These"], ["Are", "Many"], [""], ["Sentences"], [""]]
+        "These,words"                         |  [["These", "words"]]
+        "停在那儿,你这肮脏的掠夺者"              |  [["你这肮脏的掠夺者", "停在那儿"]]
+        "These!words?form;a:sentence.here"    |  [["These"], ["words"], ["a", "form", "sentence"], ["here"]]
+    }
+
+    def "Checking for emptiness works properly"() {
+        given:
+        SentenceParser parser = new SentenceParser()
+
+        when:
+        def sentenceStream = parser.parse(streamFromString(sentence))
+        List<List<String>> sentenceWords = sentenceStream.filter({it -> !it.isEmpty() })
+                                                         .map({ it -> it.sortedWords })
+                                                         .collect(Collectors.toList())
+        then:
+        sentenceWords == expectedWords
+
+        where:
+        sentence                              || expectedWords
+        " This is test sentence. "            |  [["is", "sentence", "test", "This"]]
+        " This   is   test   sentence. "      |  [["is", "sentence", "test", "This"]]
+        " These . Are Many .. Sentences. "    |  [["These"], ["Are", "Many"], ["Sentences"]]
+    }
+
     // This test requires "run configuration" modified with "-Xmx32m" VM argument to test properly
     def "Sentence parser reads large input"() {
         given:

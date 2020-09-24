@@ -6,6 +6,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Sentence {
+
+    private static final String WORD_SEPARATOR_REGEX = "\\s+|\\p{Punct}";
     private final List<String> sortedWords;
 
     static Sentence from(String sentenceString) {
@@ -17,13 +19,18 @@ public class Sentence {
     }
 
     private static List<String> sortedWordList(String sentenceString) {
-        return Arrays.stream(sentenceString.split("\\W+"))
+        return Arrays.stream(sentenceString.trim().split(WORD_SEPARATOR_REGEX))
                      .sorted(String::compareToIgnoreCase)
                      .collect(Collectors.toList());
     }
 
     public List<String> getSortedWords() {
         return sortedWords;
+    }
+
+    public boolean isEmpty() {
+        return sortedWords.isEmpty()
+                || sortedWords.stream().allMatch(String::isBlank);
     }
 
     @Override

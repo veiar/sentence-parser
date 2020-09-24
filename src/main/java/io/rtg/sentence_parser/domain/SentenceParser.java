@@ -9,7 +9,7 @@ import java.util.stream.StreamSupport;
 
 public class SentenceParser {
 
-    private static final String SENTENCE_SEPARATOR = "\\.";
+    private static final String SENTENCE_SEPARATOR = "\\.|\\?|!";
 
     public Stream<Sentence> parse(InputStream inputStream) {
         Scanner scanner = new Scanner(inputStream);
