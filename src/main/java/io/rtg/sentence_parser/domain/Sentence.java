@@ -1,13 +1,13 @@
 package io.rtg.sentence_parser.domain;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Sentence {
 
-    private static final String WORD_SEPARATOR_REGEX = "\\s+|\\p{Punct}";
+    private static final String WORD_SEPARATOR_REGEX = "\\s+|;|:|\\(|\\)|,|-";
+    private static final Map<Character, Character> REPLACEMENTS = Map.of('’', '\'');
     private final List<String> sortedWords;
 
     static Sentence from(String sentenceString) {
@@ -19,9 +19,19 @@ public class Sentence {
     }
 
     private static List<String> sortedWordList(String sentenceString) {
-        return Arrays.stream(sentenceString.trim().split(WORD_SEPARATOR_REGEX))
+        String fixedSentence = applyReplacements(sentenceString);
+        return Arrays.stream(fixedSentence.trim().split(WORD_SEPARATOR_REGEX))
+                     .filter(Predicate.not(String::isEmpty))
                      .sorted(String::compareToIgnoreCase)
                      .collect(Collectors.toList());
+    }
+
+    private static String applyReplacements(String sentenceString) {
+        String result = sentenceString;
+        for (Map.Entry<Character, Character> characterCharacterEntry : REPLACEMENTS.entrySet()) {
+            result = result.replace(characterCharacterEntry.getKey(), characterCharacterEntry.getValue());
+        }
+        return result;
     }
 
     public List<String> getSortedWords() {

@@ -9,7 +9,7 @@ import java.util.stream.StreamSupport;
 
 public class SentenceParser {
 
-    private static final String SENTENCE_SEPARATOR = "\\.|\\?|!";
+    private static final String SENTENCE_SEPARATOR = "(?<!Mr)\\.|\\?|!";
 
     public Stream<Sentence> parse(InputStream inputStream) {
         Scanner scanner = new Scanner(inputStream);
@@ -21,10 +21,5 @@ public class SentenceParser {
     private Stream<String> streamFromScanner(Scanner scanner) {
         Spliterator<String> scannerSpliterator = Spliterators.spliteratorUnknownSize(scanner, Spliterator.NONNULL);
         return StreamSupport.stream(scannerSpliterator, false);
-    }
-
-    public static boolean isSupportedFormat(String printFormatName) {
-        // FIXME
-        return true;
     }
 }

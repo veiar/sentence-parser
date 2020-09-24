@@ -2,6 +2,7 @@ package io.rtg.sentence_parser
 
 
 import io.rtg.sentence_parser.domain.SentenceParser
+import spock.lang.Ignore
 import spock.lang.Specification
 
 import java.util.stream.Collectors
@@ -35,12 +36,13 @@ class SentenceParserTest extends Specification {
         where:
         sentence                              || expectedWords
         "This is test sentence."              |  [["is", "sentence", "test", "This"]]
-        " This is test sentence. "            |  [["is", "sentence", "test", "This"], [""]]
-        " This   is   test   sentence. "      |  [["is", "sentence", "test", "This"], [""]]
-        " These . Are Many .. Sentences. "    |  [["These"], ["Are", "Many"], [""], ["Sentences"], [""]]
+        " This is test sentence. "            |  [["is", "sentence", "test", "This"], []]
+        " This   is   test   sentence. "      |  [["is", "sentence", "test", "This"], []]
+        " These . Are Many .. Sentences. "    |  [["These"], ["Are", "Many"], [], ["Sentences"], []]
         "These,words"                         |  [["These", "words"]]
         "停在那儿,你这肮脏的掠夺者"              |  [["你这肮脏的掠夺者", "停在那儿"]]
-        "These!words?form;a:sentence.here"    |  [["These"], ["words"], ["a", "form", "sentence"], ["here"]]
+        "These!words?form;a:sen-te(nc)e.here" |  [["These"], ["words"], ["a", "e", "form", "nc", "sen", "te"], ["here"]]
+        "Hello Mr. Zang!"                     |  [["Hello", "Mr.", "Zang"]]
     }
 
     def "Checking for emptiness works properly"() {
@@ -63,6 +65,7 @@ class SentenceParserTest extends Specification {
     }
 
     // This test requires "run configuration" modified with "-Xmx32m" VM argument to test properly
+    @Ignore
     def "Sentence parser reads large input"() {
         given:
         SentenceParser parser = new SentenceParser()
