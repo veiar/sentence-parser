@@ -73,6 +73,7 @@ class SentenceParserTest extends Specification {
         when:
         def sentenceStream = parser.parse(ClassLoader.getSystemResourceAsStream("test-input/large.in"))
         long sentenceCount = sentenceStream.map({ it -> it.sortedWords }).count()
+
         then:
         sentenceCount == 692737
     }

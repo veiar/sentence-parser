@@ -23,6 +23,7 @@ public class SentencePrinter {
     private static EnumMap<PrintFormat, SentenceFormatter> createFormattersMap() {
         EnumMap<PrintFormat, SentenceFormatter> formattersMap = new EnumMap<>(PrintFormat.class);
         formattersMap.put(PrintFormat.CSV, new CsvFormatter());
+        formattersMap.put(PrintFormat.XML, new XMLFormatter());
         return formattersMap;
     }
 }
