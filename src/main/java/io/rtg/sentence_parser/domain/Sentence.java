@@ -22,8 +22,17 @@ public class Sentence {
         String fixedSentence = applyReplacements(sentenceString);
         return Arrays.stream(fixedSentence.trim().split(WORD_SEPARATOR_REGEX))
                      .filter(Predicate.not(String::isEmpty))
-                     .sorted(String::compareToIgnoreCase)
+                     .sorted(wordComparator())
                      .collect(Collectors.toUnmodifiableList());
+    }
+
+    private static Comparator<String> wordComparator() {
+        return (String word1, String word2) -> {
+            if (!word1.equalsIgnoreCase(word2)) {
+                return word1.compareToIgnoreCase(word2);
+            }
+            return word2.compareTo(word1);
+        };
     }
 
     private static String applyReplacements(String sentenceString) {

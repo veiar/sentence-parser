@@ -43,6 +43,7 @@ class SentenceParserTest extends Specification {
         "停在那儿,你这肮脏的掠夺者"              |  [["你这肮脏的掠夺者", "停在那儿"]]
         "These!words?form;a:sen-te(nc)e.here" |  [["These"], ["words"], ["a", "e", "form", "nc", "sen", "te"], ["here"]]
         "Hello Mr. Zang!"                     |  [["Hello", "Mr.", "Zang"]]
+        "TEst Test test"                      |  [["test", "Test", "TEst"]]
     }
 
     def "Checking for emptiness works properly"() {
