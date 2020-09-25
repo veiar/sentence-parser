@@ -23,7 +23,7 @@ public class Sentence {
         return Arrays.stream(fixedSentence.trim().split(WORD_SEPARATOR_REGEX))
                      .filter(Predicate.not(String::isEmpty))
                      .sorted(String::compareToIgnoreCase)
-                     .collect(Collectors.toList());
+                     .collect(Collectors.toUnmodifiableList());
     }
 
     private static String applyReplacements(String sentenceString) {
